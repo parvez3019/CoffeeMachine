@@ -79,5 +79,8 @@ func setupInventory() *IngredientInventory {
 		"sugar_syrup":      100,
 		"tea_leaves_syrup": 100,
 	}
-	return NewIngredientInventory(inventories)
+
+	publisher := Publisher{}
+	publisher.AddSubscriber(NewAlertSubscriber())
+	return NewIngredientInventory(inventories, publisher)
 }

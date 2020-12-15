@@ -7,16 +7,14 @@ import (
 
 type IngredientInventory struct {
 	itemsWithQuantity map[Ingredient]Quantity
+	Publisher
 }
 
-func NewIngredientInventory(items map[Ingredient]Quantity) *IngredientInventory {
-	return &IngredientInventory{itemsWithQuantity: items}
+func NewIngredientInventory(items map[Ingredient]Quantity, publisher Publisher) *IngredientInventory {
+	return &IngredientInventory{itemsWithQuantity: items, Publisher: publisher}
 }
 
 func (inventory IngredientInventory) checkAvailability(ingredientReq map[Ingredient]Quantity) error {
-	fmt.Printf("Available %+v\n", inventory.itemsWithQuantity)
-	fmt.Printf("Required %+v\n", ingredientReq)
-
 	for ingredient, _ := range ingredientReq {
 		if _, ok := inventory.itemsWithQuantity[ingredient]; !ok {
 			return errors.New(fmt.Sprintf("%s is not available", string(ingredient)))
@@ -26,6 +24,7 @@ func (inventory IngredientInventory) checkAvailability(ingredientReq map[Ingredi
 		if inventory.itemsWithQuantity[ingredient] == 0 {
 			return errors.New(fmt.Sprintf("%s is not available", string(ingredient)))
 		} else if inventory.itemsWithQuantity[ingredient] < reqQuantity {
+			inventory.NotifyAll(ingredient)
 			return errors.New(fmt.Sprintf("item %s is not sufficient", string(ingredient)))
 		}
 	}
@@ -36,5 +35,11 @@ func (inventory IngredientInventory) update(ingredientReq map[Ingredient]Quantit
 	for ingredient, reqQuantity := range ingredientReq {
 		availableQuantity := inventory.itemsWithQuantity[ingredient]
 		inventory.itemsWithQuantity[ingredient] = availableQuantity - reqQuantity
+	}
+}
+
+func (inventory IngredientInventory) NotifyAll(ingredient Ingredient) {
+	for _, o := range inventory.subscribers {
+		o.notify(ingredient)
 	}
 }

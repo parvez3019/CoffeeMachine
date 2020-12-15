@@ -2,7 +2,6 @@ package domain
 
 import (
 	"errors"
-	"fmt"
 	"sync"
 )
 
@@ -41,7 +40,6 @@ func (cm *CoffeeMachine) MakeBeverage(beverage Beverage, outletNumber int) error
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	fmt.Println(beverage)
 	err = cm.ingredientInventory.checkAvailability(r.ingredientsWithQuantity)
 	if err != nil {
 
