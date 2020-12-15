@@ -10,21 +10,21 @@ func NewCoffeeMachineBuilder() *CoffeeMachineBuilder {
 	}
 }
 
-func (builder *CoffeeMachineBuilder) addInventory(inventory *IngredientInventory) *CoffeeMachineBuilder {
+func (builder *CoffeeMachineBuilder) AddInventory(inventory *IngredientInventory) *CoffeeMachineBuilder {
 	builder.ingredientInventory = inventory
 	return builder
 }
 
-func (builder *CoffeeMachineBuilder) addRecipes(recipes Recipes) *CoffeeMachineBuilder {
+func (builder *CoffeeMachineBuilder) AddRecipes(recipes *Recipes) *CoffeeMachineBuilder {
 	builder.recipes = recipes
 	return builder
 }
 
-func (builder *CoffeeMachineBuilder) setTotalOutlets(outlets []Outlet) *CoffeeMachineBuilder {
+func (builder *CoffeeMachineBuilder) SetTotalOutlets(outlets []Outlet) *CoffeeMachineBuilder {
 	builder.outlets = outlets
 	return builder
 }
 
-func (builder *CoffeeMachineBuilder) build() *CoffeeMachine {
+func (builder *CoffeeMachineBuilder) Build() *CoffeeMachine {
 	return builder.CoffeeMachine
 }

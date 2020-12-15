@@ -2,6 +2,7 @@ package domain
 
 import (
 	"errors"
+	"fmt"
 	"sync"
 )
 
@@ -9,7 +10,7 @@ type Beverage string
 
 type CoffeeMachine struct {
 	ingredientInventory *IngredientInventory
-	recipes             Recipes
+	recipes             *Recipes
 	outlets             []Outlet
 }
 
@@ -23,30 +24,32 @@ func NewCoffeeMachine() *CoffeeMachine {
 	}
 	return &CoffeeMachine{
 		ingredientInventory: &IngredientInventory{},
-		recipes:             Recipes{},
+		recipes:             &Recipes{},
 		outlets:             []Outlet{},
 	}
 }
 
-func (cm *CoffeeMachine) makeBeverage(beverage Beverage, outletNumber int) (bool, error) {
+func (cm *CoffeeMachine) MakeBeverage(beverage Beverage, outletNumber int) error {
 	if outletNumber >= len(cm.outlets) {
-		return false, errors.New("Invalid_Outlet")
+		return errors.New("Invalid_Outlet")
 	}
 	r, err := cm.recipes.get(beverage)
-	if err == nil || r == nil {
-		return false, err
+	if err != nil {
+		return err
 	}
 
 	mutex.Lock()
+	defer mutex.Unlock()
 
+	fmt.Println(beverage)
 	err = cm.ingredientInventory.checkAvailability(r.ingredientsWithQuantity)
 	if err != nil {
-		return false, err
+
+		return err
 	}
 	cm.ingredientInventory.update(r.ingredientsWithQuantity)
 
 	cm.outlets[outletNumber].dispenseBeverage(beverage)
 
-	mutex.Unlock()
-	return true, nil
+	return nil
 }
