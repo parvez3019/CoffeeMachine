@@ -16,7 +16,11 @@ type CoffeeMachine struct {
 var mutex = &sync.Mutex{}
 
 func NewCoffeeMachine() *CoffeeMachine {
-	return &CoffeeMachine{}
+	return &CoffeeMachine{
+		ingredientInventory: &IngredientInventory{},
+		recipes:             Recipes{},
+		outlets:             []Outlet{},
+	}
 }
 
 func (cm *CoffeeMachine) makeBeverage(beverage Beverage, outletNumber int) (bool, error) {
