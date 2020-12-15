@@ -15,7 +15,12 @@ type CoffeeMachine struct {
 
 var mutex = &sync.Mutex{}
 
+var coffeeMachineInstance *CoffeeMachine = nil
+
 func NewCoffeeMachine() *CoffeeMachine {
+	if coffeeMachineInstance != nil {
+		return coffeeMachineInstance
+	}
 	return &CoffeeMachine{
 		ingredientInventory: &IngredientInventory{},
 		recipes:             Recipes{},
