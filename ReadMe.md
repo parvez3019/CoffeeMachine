@@ -4,7 +4,7 @@ Run test in CoffeeMachineService_test to run test the machine
 
 Note :
 1) Followed YAGNI while writing this code
-2) Could not do TDD because of time crunch but Tried to follow DDD
+2) Could not do TDD because of time crunch but tried where ever it was possible and important
 3) Tried to code in a way that this can be extensible
 4) Haven't implemented parallel drink as we are running this through test only. Using go routines this can de 
 done easily as I have added locks on domains updates! We can fire N go routine and call makeBeverage() to run in parallel
